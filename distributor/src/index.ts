@@ -1,4 +1,4 @@
-import express from "express";
+import express, { urlencoded } from "express";
 import cors from "cors";
 
 import distributorRouter from "./router/distributorRouter";
@@ -6,6 +6,7 @@ import distributorRouter from "./router/distributorRouter";
 const app = express();
 
 app.use(cors());
+app.use(express.json());
 app.use("/distributor", distributorRouter);
 
 app.listen(8000, () => {

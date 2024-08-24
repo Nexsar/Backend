@@ -14,11 +14,13 @@ datasource db {
 }
 
 model Distributor {
-  id        Int    @id @default(autoincrement())
-  address   String @unique
-  budget    Int
-  posts     Post[]
-  frequency Int
+  id          Int    @id @default(autoincrement())
+  address     String @unique
+  name        String
+  description String
+  budget      Int
+  posts       Post[]
+  frequency   Int
 }
 
 model Post {
@@ -35,4 +37,9 @@ model Option {
   post      Post   @relation(fields: [post_id], references: [id])
   image_url String
   votes     Int
+}
+
+model Agent {
+  id             Int @id @default(autoincrement())
+  distributor_id Int
 }
