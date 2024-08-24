@@ -29,6 +29,7 @@ model Post {
   distributor    Distributor @relation(fields: [distributor_id], references: [id])
   content        String
   options        Option[]
+  done           Boolean
 }
 
 model Option {
