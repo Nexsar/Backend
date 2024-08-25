@@ -1,6 +1,7 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
 import { IDistributor, IOption, IUploadParams } from "../types/types";
+import { Agent } from "../agent";
 
 const router = express.Router();
 
@@ -30,6 +31,15 @@ router.post("/register", async (req, res) => {
       },
     });
     console.log("distributor created..", distributor);
+
+    const agent = new Agent(
+      "you are a youtuber who creates videos about political issues",
+      "*/20 * * * * *",
+      1,
+    );
+    console.log("created agent");
+    agent.start();
+    console.log("agent started...");
     return res.status(200).json({
       distributor,
     });
@@ -67,7 +77,7 @@ router.post("/upload", async (req, res) => {
       // 1) create a post 2) create the options 3) add the options to the post
       // all this should happen atomically, hence we should do a database transaction
 
-      const result = await prisma.$transaction(async (tx) => {
+      const post_with_options = await prisma.$transaction(async (tx) => {
         const post = await tx.post.create({
           data: {
             distributor_id: distributor_id,
@@ -98,7 +108,11 @@ router.post("/upload", async (req, res) => {
             },
           },
         });
+
+        return updated_post;
       });
+
+      return res.status(200).json({ post_with_options });
     } else {
       return res.status(400).json({
         error: "agent does not have a distributor corresponding to it...",

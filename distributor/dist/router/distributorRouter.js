@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const client_1 = require("@prisma/client");
+const agent_1 = require("../agent");
 const router = express_1.default.Router();
 const prisma = new client_1.PrismaClient();
 router.get("/info", (req, res) => {
@@ -38,6 +39,10 @@ router.post("/register", (req, res) => __awaiter(void 0, void 0, void 0, functio
             },
         });
         console.log("distributor created..", distributor);
+        const agent = new agent_1.Agent("you are a youtuber who creates videos about political issues", "*/20 * * * * *", 1);
+        console.log("created agent");
+        agent.start();
+        console.log("agent started...");
         return res.status(200).json({
             distributor,
         });
@@ -71,7 +76,7 @@ router.post("/upload", (req, res) => __awaiter(void 0, void 0, void 0, function*
             // IMP: we need to
             // 1) create a post 2) create the options 3) add the options to the post
             // all this should happen atomically, hence we should do a database transaction
-            const result = yield prisma.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
+            const post_with_options = yield prisma.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
                 const post = yield tx.post.create({
                     data: {
                         distributor_id: distributor_id,
@@ -100,7 +105,9 @@ router.post("/upload", (req, res) => __awaiter(void 0, void 0, void 0, function*
                         },
                     },
                 });
+                return updated_post;
             }));
+            return res.status(200).json({ post_with_options });
         }
         else {
             return res.status(400).json({
