@@ -1,10 +1,12 @@
 import axios from "axios";
 import fs from "fs";
+import { v4 as uuidv4 } from "uuid";
 
 const HUGGING_FACE_API_KEY = "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";
 const model = "gpt2";
 
 export async function generateText(prompt: string) {
+  console.log("got the prompts as", prompt);
   try {
     const response = await axios.post(
       `https://api-inference.huggingface.co/models/${model}`,
@@ -23,6 +25,7 @@ export async function generateText(prompt: string) {
 }
 
 export async function generateImage(prompt: string) {
+  console.log("got the prompts as", prompt);
   try {
     const response = await axios.post(
       "https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4",
@@ -35,7 +38,8 @@ export async function generateImage(prompt: string) {
     const imageBuffer = Buffer.from(response.data, "binary");
 
     // Save the image as a PNG file
-    const imagePath = "generated_image.png";
+    const uuid = uuidv4();
+    const imagePath = `ai_img${uuid}.png`;
     fs.writeFileSync(imagePath, imageBuffer);
     console.log("saved image...");
   } catch (error) {
