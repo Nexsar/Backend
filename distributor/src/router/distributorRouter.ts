@@ -32,7 +32,11 @@ router.post("/register", async (req, res) => {
     });
     console.log("distributor created..", distributor);
 
-    const agent = new Agent(description, "*/10 * * * * *", 1);
+    const agent = new Agent(
+      description,
+      `*/${frequency} * * * * *`,
+      distributor.id,
+    );
     console.log("created agent");
     agent.start();
     console.log("agent started...");
