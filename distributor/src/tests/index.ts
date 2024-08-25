@@ -1,5 +1,6 @@
 import { generateImage, generateText } from "../utils/ai";
 import schedule from "node-schedule";
+import { storeToIpfs } from "../utils/upload_fle";
 
 const ai_text_test = async () => {
   const resp = await generateText("a blue sky");
@@ -12,11 +13,13 @@ const ai_image_test = async (prompt: string) => {
 };
 
 const test_cron = () => {
-  const images = ["dogs", "cats", "giraffe"];
+  const prompts = [
+    "you are a youtuber of coding channel. generate thumbnail for a video",
+  ];
   schedule.scheduleJob("*/10 * * * * *", async () => {
     try {
       for (let i = 0; i < 3; i++) {
-        const image = await ai_image_test(`${images[i]} - Variation${i}`);
+        const image = await ai_image_test(`${prompts[0]} - Variation${i}`);
         console.log("image no. ", i);
       }
 
@@ -29,4 +32,19 @@ const test_cron = () => {
   });
 };
 
-test_cron();
+async function test_generateAndStoreImageUrl(prompt: string): Promise<string> {
+  try {
+    // Step 1: Generate the image
+    const imageBuffer = await generateImage(prompt);
+
+    // Step 2: Store the image to IPFS and get the URL
+    const imageUrl = await storeToIpfs(imageBuffer);
+
+    return imageUrl;
+  } catch (error) {
+    console.error("Error in generateAndStoreImageUrl:", error);
+    throw error;
+  }
+}
+
+test_generateAndStoreImageUrl("coding boy");

@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Agent = void 0;
 const node_schedule_1 = __importDefault(require("node-schedule"));
 const ai_1 = require("./utils/ai");
+const upload_fle_1 = require("./utils/upload_fle");
 //TODO: move them to constants
 const uploadEndpoint = "http://localhost:8000/distributor/upload";
 class Agent {
@@ -26,7 +27,8 @@ class Agent {
     generatePoll(prompt) {
         return __awaiter(this, void 0, void 0, function* () {
             const text = yield (0, ai_1.generateText)(prompt);
-            const imageUrl = yield (0, ai_1.generateImage)(prompt);
+            const imageBuffer = yield (0, ai_1.generateImage)(prompt);
+            const imageUrl = yield (0, upload_fle_1.storeToIpfs)(imageBuffer);
             console.log("Post Content:", {
                 text,
                 imageUrl,

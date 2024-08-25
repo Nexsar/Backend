@@ -1,6 +1,7 @@
 import axios from "axios";
 import schedule from "node-schedule";
 import { generateImage, generateText } from "./utils/ai";
+import { storeToIpfs } from "./utils/upload_fle";
 
 //TODO: move them to constants
 const uploadEndpoint = "http://localhost:8000/distributor/upload";
@@ -18,7 +19,8 @@ export class Agent {
 
   private async generatePoll(prompt: string) {
     const text = await generateText(prompt);
-    const imageUrl = await generateImage(prompt);
+    const imageBuffer = await generateImage(prompt);
+    const imageUrl = await storeToIpfs(imageBuffer);
 
     console.log("Post Content:", {
       text,

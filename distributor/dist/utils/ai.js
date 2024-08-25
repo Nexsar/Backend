@@ -15,8 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateText = generateText;
 exports.generateImage = generateImage;
 const axios_1 = __importDefault(require("axios"));
-const fs_1 = __importDefault(require("fs"));
-const uuid_1 = require("uuid");
 const HUGGING_FACE_API_KEY = "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";
 const model = "gpt2";
 function generateText(prompt) {
@@ -38,21 +36,18 @@ function generateText(prompt) {
 }
 function generateImage(prompt) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("got the prompts as", prompt);
         try {
+            // Generate the image using Hugging Face API
             const response = yield axios_1.default.post("https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4", { inputs: prompt }, {
                 headers: { Authorization: `Bearer ${HUGGING_FACE_API_KEY}` },
                 responseType: "arraybuffer",
             });
             const imageBuffer = Buffer.from(response.data, "binary");
-            // Save the image as a PNG file
-            const uuid = (0, uuid_1.v4)();
-            const imagePath = `ai_img${uuid}.png`;
-            fs_1.default.writeFileSync(imagePath, imageBuffer);
-            console.log("saved image...");
+            return imageBuffer;
         }
         catch (error) {
             console.error("Error generating image:", error);
+            throw error;
         }
     });
 }

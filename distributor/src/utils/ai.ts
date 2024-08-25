@@ -24,9 +24,9 @@ export async function generateText(prompt: string) {
   }
 }
 
-export async function generateImage(prompt: string) {
-  console.log("got the prompts as", prompt);
+export async function generateImage(prompt: string): Promise<Buffer> {
   try {
+    // Generate the image using Hugging Face API
     const response = await axios.post(
       "https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4",
       { inputs: prompt },
@@ -35,14 +35,11 @@ export async function generateImage(prompt: string) {
         responseType: "arraybuffer",
       },
     );
-    const imageBuffer = Buffer.from(response.data, "binary");
 
-    // Save the image as a PNG file
-    const uuid = uuidv4();
-    const imagePath = `ai_img${uuid}.png`;
-    fs.writeFileSync(imagePath, imageBuffer);
-    console.log("saved image...");
+    const imageBuffer = Buffer.from(response.data, "binary");
+    return imageBuffer;
   } catch (error) {
     console.error("Error generating image:", error);
+    throw error;
   }
 }

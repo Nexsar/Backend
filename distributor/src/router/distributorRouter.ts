@@ -32,11 +32,7 @@ router.post("/register", async (req, res) => {
     });
     console.log("distributor created..", distributor);
 
-    const agent = new Agent(
-      "you are a youtuber who creates videos about political issues",
-      "*/20 * * * * *",
-      1,
-    );
+    const agent = new Agent(description, "*/10 * * * * *", 1);
     console.log("created agent");
     agent.start();
     console.log("agent started...");
@@ -98,18 +94,8 @@ router.post("/upload", async (req, res) => {
 
           options.push(option as IOption);
         }
-        const updated_post = await tx.post.update({
-          where: {
-            id: post.id,
-          },
-          data: {
-            options: {
-              create: options,
-            },
-          },
-        });
 
-        return updated_post;
+        return post;
       });
 
       return res.status(200).json({ post_with_options });
