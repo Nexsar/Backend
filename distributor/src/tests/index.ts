@@ -47,4 +47,4 @@ async function test_generateAndStoreImageUrl(prompt: string): Promise<string> {
   }
 }
 
-test_generateAndStoreImageUrl("coding boy");
+test_generateAndStoreImageUrl("giraffe");

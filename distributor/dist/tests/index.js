@@ -56,4 +56,4 @@ function test_generateAndStoreImageUrl(prompt) {
         }
     });
 }
-test_generateAndStoreImageUrl("coding boy");
+test_generateAndStoreImageUrl("giraffe");
