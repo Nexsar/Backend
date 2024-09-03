@@ -115,4 +115,28 @@ router.post("/upload", async (req, res) => {
   }
 });
 
+router.patch("/post_done/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const postId = parseInt(id, 10);
+
+    if (isNaN(postId)) {
+      return res.status(400).json({ error: "Invalid post ID" });
+    }
+
+    const post = await prisma.post.update({
+      where: { id: postId },
+      data: { done: true },
+    });
+
+    return res.json(post);
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ error: "An error occurred while updating the post" });
+  }
+});
+
 export default router;

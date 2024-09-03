@@ -111,4 +111,24 @@ router.post("/upload", (req, res) => __awaiter(void 0, void 0, void 0, function*
             .json({ error: "you are not an agent... hehe badmosi!" });
     }
 }));
+router.patch("/done/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const postId = parseInt(id, 10);
+        if (isNaN(postId)) {
+            return res.status(400).json({ error: "Invalid post ID" });
+        }
+        const post = yield prisma.post.update({
+            where: { id: postId },
+            data: { done: true },
+        });
+        return res.json(post);
+    }
+    catch (error) {
+        console.error(error);
+        return res
+            .status(500)
+            .json({ error: "An error occurred while updating the post" });
+    }
+}));
 exports.default = router;
