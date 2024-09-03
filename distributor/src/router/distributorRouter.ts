@@ -77,7 +77,7 @@ router.post("/upload", async (req, res) => {
       // 1) create a post 2) create the options 3) add the options to the post
       // all this should happen atomically, hence we should do a database transaction
 
-      const post_with_options = await prisma.$transaction(async (tx: any) => {
+      const post_with_options = await prisma.$transaction(async (tx) => {
         const post = await tx.post.create({
           data: {
             distributor_id: distributor_id,
