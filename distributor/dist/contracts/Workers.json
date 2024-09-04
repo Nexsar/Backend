@@ -1,0 +1,354 @@
+{
+    "abi": [
+        {
+            "type": "constructor",
+            "inputs": [],
+            "stateMutability": "nonpayable"
+        },
+        {
+            "type": "receive",
+            "stateMutability": "payable"
+        },
+        {
+            "type": "function",
+            "name": "getAllWorkersRewards",
+            "inputs": [
+                {
+                    "name": "workers",
+                    "type": "address[]",
+                    "internalType": "address[]"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "rewards",
+                    "type": "uint256[]",
+                    "internalType": "uint256[]"
+                }
+            ],
+            "stateMutability": "view"
+        },
+        {
+            "type": "function",
+            "name": "getRewards",
+            "inputs": [
+                {
+                    "name": "worker",
+                    "type": "address",
+                    "internalType": "address"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "stateMutability": "view"
+        },
+        {
+            "type": "function",
+            "name": "getVotedOption",
+            "inputs": [
+                {
+                    "name": "worker",
+                    "type": "address",
+                    "internalType": "address"
+                },
+                {
+                    "name": "post_id",
+                    "type": "string",
+                    "internalType": "string"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "bytes32",
+                    "internalType": "bytes32"
+                }
+            ],
+            "stateMutability": "view"
+        },
+        {
+            "type": "function",
+            "name": "getWorker",
+            "inputs": [
+                {
+                    "name": "worker",
+                    "type": "address",
+                    "internalType": "address"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "tuple",
+                    "internalType": "struct Workers.Worker",
+                    "components": [
+                        {
+                            "name": "id",
+                            "type": "address",
+                            "internalType": "address"
+                        },
+                        {
+                            "name": "listed",
+                            "type": "bool",
+                            "internalType": "bool"
+                        }
+                    ]
+                }
+            ],
+            "stateMutability": "view"
+        },
+        {
+            "type": "function",
+            "name": "initWorker",
+            "inputs": [],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+        },
+        {
+            "type": "function",
+            "name": "removeWorker",
+            "inputs": [
+                {
+                    "name": "worker",
+                    "type": "address",
+                    "internalType": "address"
+                }
+            ],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+        },
+        {
+            "type": "function",
+            "name": "s_Workers",
+            "inputs": [
+                {
+                    "name": "worker",
+                    "type": "address",
+                    "internalType": "address"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "id",
+                    "type": "address",
+                    "internalType": "address"
+                },
+                {
+                    "name": "listed",
+                    "type": "bool",
+                    "internalType": "bool"
+                }
+            ],
+            "stateMutability": "view"
+        },
+        {
+            "type": "function",
+            "name": "s_turks_reward",
+            "inputs": [
+                {
+                    "name": "worker",
+                    "type": "address",
+                    "internalType": "address"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "rewards",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "stateMutability": "view"
+        },
+        {
+            "type": "function",
+            "name": "s_voted_post_option",
+            "inputs": [
+                {
+                    "name": "worker",
+                    "type": "address",
+                    "internalType": "address"
+                },
+                {
+                    "name": "post_id",
+                    "type": "bytes32",
+                    "internalType": "bytes32"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "option_id",
+                    "type": "bytes32",
+                    "internalType": "bytes32"
+                }
+            ],
+            "stateMutability": "view"
+        },
+        {
+            "type": "function",
+            "name": "updateRewards",
+            "inputs": [
+                {
+                    "name": "workers",
+                    "type": "address[]",
+                    "internalType": "address[]"
+                },
+                {
+                    "name": "prizepool",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "post_id",
+                    "type": "string",
+                    "internalType": "string"
+                }
+            ],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+        },
+        {
+            "type": "function",
+            "name": "updateVotingMapping",
+            "inputs": [
+                {
+                    "name": "workers",
+                    "type": "address[]",
+                    "internalType": "address[]"
+                },
+                {
+                    "name": "post_ids",
+                    "type": "string[]",
+                    "internalType": "string[]"
+                },
+                {
+                    "name": "option_ids",
+                    "type": "string[]",
+                    "internalType": "string[]"
+                }
+            ],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+        },
+        {
+            "type": "function",
+            "name": "withdrawRewards",
+            "inputs": [],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+        },
+        {
+            "type": "event",
+            "name": "RewardGranted",
+            "inputs": [
+                {
+                    "name": "post_id",
+                    "type": "string",
+                    "indexed": true,
+                    "internalType": "string"
+                }
+            ],
+            "anonymous": false
+        },
+        {
+            "type": "event",
+            "name": "RewardWithdrawn",
+            "inputs": [
+                {
+                    "name": "worker",
+                    "type": "address",
+                    "indexed": true,
+                    "internalType": "address"
+                },
+                {
+                    "name": "amount",
+                    "type": "uint256",
+                    "indexed": false,
+                    "internalType": "uint256"
+                }
+            ],
+            "anonymous": false
+        },
+        {
+            "type": "event",
+            "name": "VoteUpdated",
+            "inputs": [
+                {
+                    "name": "worker",
+                    "type": "address",
+                    "indexed": true,
+                    "internalType": "address"
+                },
+                {
+                    "name": "post_id",
+                    "type": "string",
+                    "indexed": false,
+                    "internalType": "string"
+                },
+                {
+                    "name": "option_id",
+                    "type": "string",
+                    "indexed": false,
+                    "internalType": "string"
+                }
+            ],
+            "anonymous": false
+        },
+        {
+            "type": "event",
+            "name": "WorkerListed",
+            "inputs": [
+                {
+                    "name": "worker",
+                    "type": "address",
+                    "indexed": true,
+                    "internalType": "address"
+                }
+            ],
+            "anonymous": false
+        },
+        {
+            "type": "event",
+            "name": "WorkerRemoved",
+            "inputs": [
+                {
+                    "name": "worker",
+                    "type": "address",
+                    "indexed": true,
+                    "internalType": "address"
+                }
+            ],
+            "anonymous": false
+        },
+        {
+            "type": "error",
+            "name": "Workers__DoesNotExist",
+            "inputs": []
+        },
+        {
+            "type": "error",
+            "name": "Workers__Exist",
+            "inputs": []
+        },
+        {
+            "type": "error",
+            "name": "Workers__FalsePayload",
+            "inputs": []
+        },
+        {
+            "type": "error",
+            "name": "Workers__NoRewards",
+            "inputs": []
+        },
+        {
+            "type": "error",
+            "name": "Workers__WithdrawFailed",
+            "inputs": []
+        }
+    ]
+}

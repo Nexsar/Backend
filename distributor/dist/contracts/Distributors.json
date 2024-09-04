@@ -1,0 +1,656 @@
+{
+    "abi": [
+        {
+            "inputs": [],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+        },
+        {
+            "inputs": [],
+            "type": "error",
+            "name": "Amount_Less_Than_0"
+        },
+        {
+            "inputs": [],
+            "type": "error",
+            "name": "Distributors__BadPayload"
+        },
+        {
+            "inputs": [],
+            "type": "error",
+            "name": "Distributors__DoesNotExist"
+        },
+        {
+            "inputs": [],
+            "type": "error",
+            "name": "Distributors__Exist"
+        },
+        {
+            "inputs": [],
+            "type": "error",
+            "name": "Distributors__NotAuthorized"
+        },
+        {
+            "inputs": [],
+            "type": "error",
+            "name": "Distributors__NotEnoughBudget"
+        },
+        {
+            "inputs": [],
+            "type": "error",
+            "name": "Distributors__OptionDoesNotExist"
+        },
+        {
+            "inputs": [],
+            "type": "error",
+            "name": "Distributors__OptionExists"
+        },
+        {
+            "inputs": [],
+            "type": "error",
+            "name": "Distributors__PostDoesNotExist"
+        },
+        {
+            "inputs": [],
+            "type": "error",
+            "name": "Insufficient_balance"
+        },
+        {
+            "inputs": [],
+            "type": "error",
+            "name": "Post_Doesnot_Exist"
+        },
+        {
+            "inputs": [],
+            "type": "error",
+            "name": "Post_Exist"
+        },
+        {
+            "inputs": [],
+            "type": "error",
+            "name": "UnAuthorised_Access"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "distributor",
+                    "type": "address",
+                    "indexed": true
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "newBudget",
+                    "type": "uint256",
+                    "indexed": false
+                }
+            ],
+            "type": "event",
+            "name": "BudgetUpdated",
+            "anonymous": false
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "distributor",
+                    "type": "address",
+                    "indexed": true
+                },
+                {
+                    "internalType": "string",
+                    "name": "postId",
+                    "type": "string",
+                    "indexed": false
+                },
+                {
+                    "internalType": "string",
+                    "name": "newDescription",
+                    "type": "string",
+                    "indexed": false
+                }
+            ],
+            "type": "event",
+            "name": "DescriptionUpdated",
+            "anonymous": false
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "distributor",
+                    "type": "address",
+                    "indexed": true
+                }
+            ],
+            "type": "event",
+            "name": "DistributorListed",
+            "anonymous": false
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "distributor",
+                    "type": "address",
+                    "indexed": true
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "newFrequency",
+                    "type": "uint256",
+                    "indexed": false
+                }
+            ],
+            "type": "event",
+            "name": "FrequencyUpdated",
+            "anonymous": false
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "distributor",
+                    "type": "address",
+                    "indexed": true
+                },
+                {
+                    "internalType": "string",
+                    "name": "postId",
+                    "type": "string",
+                    "indexed": false
+                },
+                {
+                    "internalType": "string",
+                    "name": "optionId",
+                    "type": "string",
+                    "indexed": false
+                },
+                {
+                    "internalType": "string",
+                    "name": "newImageUrl",
+                    "type": "string",
+                    "indexed": false
+                }
+            ],
+            "type": "event",
+            "name": "ImageUrlUpdated",
+            "anonymous": false
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "distributor",
+                    "type": "address",
+                    "indexed": true
+                },
+                {
+                    "internalType": "string",
+                    "name": "postId",
+                    "type": "string",
+                    "indexed": false
+                }
+            ],
+            "type": "event",
+            "name": "OptionsUpdated",
+            "anonymous": false
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "distributor",
+                    "type": "address",
+                    "indexed": true
+                },
+                {
+                    "internalType": "string",
+                    "name": "postId",
+                    "type": "string",
+                    "indexed": false
+                }
+            ],
+            "type": "event",
+            "name": "PostAdded",
+            "anonymous": false
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "distributor",
+                    "type": "address",
+                    "indexed": true
+                },
+                {
+                    "internalType": "string",
+                    "name": "postId",
+                    "type": "string",
+                    "indexed": false
+                },
+                {
+                    "internalType": "string",
+                    "name": "optionId",
+                    "type": "string",
+                    "indexed": false
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "voteCount",
+                    "type": "uint256",
+                    "indexed": false
+                }
+            ],
+            "type": "event",
+            "name": "VotesUpdated",
+            "anonymous": false
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "postId",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "description",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string[]",
+                    "name": "optionIds",
+                    "type": "string[]"
+                },
+                {
+                    "internalType": "string[]",
+                    "name": "imageUrls",
+                    "type": "string[]"
+                },
+                {
+                    "internalType": "address",
+                    "name": "distributorAddress",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function",
+            "name": "AddPost"
+        },
+        {
+            "inputs": [],
+            "stateMutability": "payable",
+            "type": "function",
+            "name": "depositETH"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "postId",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function",
+            "name": "getAllOptions",
+            "outputs": [
+                {
+                    "internalType": "struct Distributors.Option[]",
+                    "name": "",
+                    "type": "tuple[]",
+                    "components": [
+                        {
+                            "internalType": "string",
+                            "name": "id",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "vote",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "imageUrl",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "affiliated_post",
+                            "type": "string"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "distributor_id",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function",
+            "name": "getAllPosts",
+            "outputs": [
+                {
+                    "internalType": "struct Distributors.Post[]",
+                    "name": "",
+                    "type": "tuple[]",
+                    "components": [
+                        {
+                            "internalType": "string",
+                            "name": "id",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "string[]",
+                            "name": "optionIds",
+                            "type": "string[]"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "description",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "address",
+                            "name": "affiliated_distributor",
+                            "type": "address"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "postId",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function",
+            "name": "getAllVotesOnPost",
+            "outputs": [
+                {
+                    "internalType": "uint256[]",
+                    "name": "",
+                    "type": "uint256[]"
+                }
+            ]
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "distributor",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function",
+            "name": "getBudget",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ]
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "distributor",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function",
+            "name": "getFrequency",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ]
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "distributor_id",
+                    "type": "address"
+                },
+                {
+                    "internalType": "string",
+                    "name": "post_id",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function",
+            "name": "getParticularPost",
+            "outputs": [
+                {
+                    "internalType": "struct Distributors.Post",
+                    "name": "",
+                    "type": "tuple",
+                    "components": [
+                        {
+                            "internalType": "string",
+                            "name": "id",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "string[]",
+                            "name": "optionIds",
+                            "type": "string[]"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "description",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "address",
+                            "name": "affiliated_distributor",
+                            "type": "address"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "postId",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function",
+            "name": "getTotalVotesOnPost",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "totalVotes",
+                    "type": "uint256"
+                }
+            ]
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "bool",
+                    "name": "listed",
+                    "type": "bool"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "initialBudget",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "initialFrequency",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "string",
+                    "name": "postId",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "description",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string[]",
+                    "name": "optionIds",
+                    "type": "string[]"
+                },
+                {
+                    "internalType": "string[]",
+                    "name": "imageUrls",
+                    "type": "string[]"
+                }
+            ],
+            "stateMutability": "payable",
+            "type": "function",
+            "name": "initDistributor"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "budget",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "address",
+                    "name": "distributorAddress",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "payable",
+            "type": "function",
+            "name": "updateBudget"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "desc",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "post_id",
+                    "type": "string"
+                },
+                {
+                    "internalType": "address",
+                    "name": "distributorAddress",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function",
+            "name": "updateDescription"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "frequency",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "address",
+                    "name": "distributorAddress",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function",
+            "name": "updateFrequency"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "url",
+                    "type": "string"
+                },
+                {
+                    "internalType": "address",
+                    "name": "distributorAddress",
+                    "type": "address"
+                },
+                {
+                    "internalType": "string",
+                    "name": "post_id",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "option_id",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function",
+            "name": "updateImageUrl"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint64[]",
+                    "name": "votes",
+                    "type": "uint64[]"
+                },
+                {
+                    "internalType": "string[]",
+                    "name": "optionIds",
+                    "type": "string[]"
+                },
+                {
+                    "internalType": "address",
+                    "name": "distributorAddress",
+                    "type": "address"
+                },
+                {
+                    "internalType": "string",
+                    "name": "post_id",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function",
+            "name": "updateVotes"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function",
+            "name": "withdrawETH"
+        }
+    ]
+}
