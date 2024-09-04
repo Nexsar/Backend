@@ -111,7 +111,7 @@ router.post("/upload", (req, res) => __awaiter(void 0, void 0, void 0, function*
             .json({ error: "you are not an agent... hehe badmosi!" });
     }
 }));
-router.patch("/done/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.patch("/post_done/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
         const postId = parseInt(id, 10);
