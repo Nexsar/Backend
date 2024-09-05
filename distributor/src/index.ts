@@ -107,6 +107,11 @@ app.post("/initializeMint", async (req, res) => {
   }
 });
 
+app.get("/test", (req, res) => {
+  console.log("hello");
+  res.send({ message: "ok" });
+});
+
 app.listen(8000, () => {
   console.log("Server up at port 8000");
 });

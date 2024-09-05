@@ -4,5 +4,7 @@ export declare class Agent {
     distributor_id: number;
     constructor(personality: string, frequency: string, distributor_id: number);
     private generatePoll;
-    start(): void;
+    private mintAndFetchTokenData;
+    private generatePollDallee;
+    start(signer?: any): void;
 }
