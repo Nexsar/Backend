@@ -16,23 +16,51 @@ app.use("/distributor", distributorRouter);
 app.use("/agent", agentRouter);
 app.use("/data", dataRouter);
 
-app.post("/dummy", async (req, res) => {
-  const contractAddress = "0x5a76D8a2BAD252fe57fb5281029a46C65d96aF52";
-  const contractABI = dalleJson.abi;
-  const signer = req.body.signer;
+app.get("/test", (req, res) => {
+  console.log("test called");
+  res.send({ "message": "ok" });
+});
+
+const contractAddress = "0x5a76D8a2BAD252fe57fb5281029a46C65d96aF52";
+const contractABI = dalleJson.abi;
+
+app.post("/getTokenUri", async (req, res) => {
+  const signerAddress = req.body.signerAddress;
+  const tokenId = req.body.tokenId;
+  console.log("signer (address)", signerAddress);
+  console.log("tokenId:", tokenId);
+
   try {
-    // Call initializeMint with the prompt message
-    const dalleNftContract = new ethers.Contract(
-      contractAddress,
-      contractABI,
-      signer,
-    );
-    const prompt = "generate image of cats";
-    // const dalleNftContract = await getContract();
+    const provider = new ethers.providers.JsonRpcProvider("https://devnet.galadriel.com");
+    const signer = provider.getSigner(signerAddress);
+
+    const contract = new ethers.Contract(contractAddress, contractABI, signer);
+
+    const tokenURI = await contract.tokenURI(tokenId);
+    const owner = await contract.ownerOf(tokenId);
+    console.log(`Token URI: ${tokenURI}`);
+    console.log(`Owner: ${owner}`);
+    res.json({ tokenURI, owner });
+  } catch (error) {
+    console.error("Error fetching contract data:", error);
+    res.status(500).json({ message: "Error fetching contract data" });
+  }
+});
+
+
+app.post("/initializeMint", async (req, res) => {
+  // const signerAddress = req.body.signerAddress;
+  const prompt = req.body.prompt;
+  try {
+    const provider = new ethers.providers.JsonRpcProvider("https://devnet.galadriel.com");
+    const wallet = new ethers.Wallet("dd4689c15f6b4b81907709f1a550601e922d181d47cb07e11f41e5d33aa1e188", provider);
+
+    const dalleNftContract = new ethers.Contract(contractAddress, contractABI, wallet);
+    console.log("prompt: ", prompt);
+
     const tx = await dalleNftContract.initializeMint(prompt);
     console.log("Minting initiated, waiting for confirmation...");
 
-    // Wait for the transaction to be mined
     const receipt = await tx.wait();
     const mintEvent = receipt.events.find(
       (event: any) => event.event === "MintInputCreated",
@@ -43,7 +71,6 @@ app.post("/dummy", async (req, res) => {
 
     return new Promise<{ tokenId: any; tokenUri: any; owner: any }>(
       (resolve, reject) => {
-        // Listen for the MetadataUpdate event for this tokenId
         dalleNftContract.once("MetadataUpdate", async (_tokenId) => {
           if (_tokenId.toNumber() === tokenId) {
             console.log(
@@ -51,7 +78,6 @@ app.post("/dummy", async (req, res) => {
             );
 
             try {
-              // Fetch the tokenURI and owner
               const tokenUri = await dalleNftContract.tokenURI(tokenId);
               const owner = await dalleNftContract.ownerOf(tokenId);
 
@@ -59,7 +85,6 @@ app.post("/dummy", async (req, res) => {
               console.log(`Token URI: ${tokenUri}`);
               console.log(`Token Owner: ${owner}`);
 
-              // Return the token data
               resolve({
                 tokenId,
                 tokenUri,
