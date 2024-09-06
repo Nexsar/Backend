@@ -23,6 +23,15 @@ model Distributor {
   frequency   Int
 }
 
+model Worker {
+  id       Int     @id @default(autoincrement())
+  address  String  @unique
+  name     String
+  amount   Int     @default(0)
+  Option   Option? @relation(fields: [optionId], references: [id])
+  optionId Int?
+}
+
 model Post {
   id             Int         @id @default(autoincrement())
   distributor_id Int
@@ -33,11 +42,12 @@ model Post {
 }
 
 model Option {
-  id        Int    @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   post_id   Int
-  post      Post   @relation(fields: [post_id], references: [id])
+  post      Post     @relation(fields: [post_id], references: [id])
   image_url String
   votes     Int
+  voters    Worker[]
 }
 
 model Agent {

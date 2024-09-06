@@ -15,13 +15,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Agent = void 0;
 const axios_1 = __importDefault(require("axios"));
 const node_schedule_1 = __importDefault(require("node-schedule"));
+const client_1 = require("@prisma/client");
 const ai_1 = require("./utils/ai");
 const upload_fle_1 = require("./utils/upload_fle");
 const constants_1 = require("./constants/constants");
 const Dalle_json_1 = __importDefault(require("../dist/contracts/Dalle.json"));
 const ethers_1 = require("ethers");
+const prisma = new client_1.PrismaClient();
 //TODO: move them to constants
 const uploadEndpoint = "http://localhost:8000/distributor/upload";
+const registerEndpoint = "http://localhost:8000/agent/register";
 class Agent {
     constructor(personality, frequency, distributor_id) {
         this.mintAndFetchTokenData = (prompt, signer) => __awaiter(this, void 0, void 0, function* () {
@@ -71,6 +74,32 @@ class Agent {
         this.personality = personality;
         this.frequency = frequency;
         this.distributor_id = distributor_id;
+        const register_agent = () => __awaiter(this, void 0, void 0, function* () {
+            const data = {
+                distributor_id: this.distributor_id,
+            };
+            try {
+                const response = yield fetch(registerEndpoint, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                });
+                const agent = yield prisma.agent.findFirst({
+                    where: {
+                        distributor_id: this.distributor_id,
+                    },
+                });
+                this.id = agent ? agent.id : -1;
+            }
+            catch (err) {
+                console.log("error while trying to register agent..", err);
+            }
+        });
+        register_agent();
+        this.start();
+        console.log("agent started...");
     }
     generatePoll(personality, index) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -124,7 +153,7 @@ class Agent {
                 console.log("poll created", { poll });
                 console.log("going to post this poll now...");
                 const response = yield axios_1.default.post(uploadEndpoint, {
-                    agent_id: 1, //TODO: register an agent first and then add its id here
+                    agent_id: this.id,
                     post_content: poll.text,
                     option_imgs: poll.image_urls,
                 });

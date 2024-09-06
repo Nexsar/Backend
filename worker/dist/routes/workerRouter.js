@@ -19,6 +19,22 @@ const prisma = new client_1.PrismaClient();
 router.get("/info", (req, res) => {
     return res.status(200).json({ message: "ok" });
 });
+router.post("/register", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { address, name } = req.body;
+    try {
+        const worker = yield prisma.worker.create({
+            data: {
+                address: address,
+                name: name,
+                amount: 0,
+            },
+        });
+        return res.status(200).json({ worker });
+    }
+    catch (error) {
+        return res.status(500).json({ error: error });
+    }
+}));
 router.post("/vote/:option_id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //vote a particular option with particular option
     //TODO: we need to remove the vote for a different option for this particular post by this guy.
@@ -33,6 +49,24 @@ router.post("/vote/:option_id", (req, res) => __awaiter(void 0, void 0, void 0, 
             },
             data: {
                 votes: { increment: 1 },
+            },
+        });
+        return res.status(200).json({ response });
+    }
+    catch (error) {
+        return res.status(500).json({ error: error });
+    }
+}));
+router.post("/pay/:id/:amount", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const worker_id = parseInt(req.params.id);
+    const amount = parseInt(req.params.amount);
+    try {
+        const response = yield prisma.worker.update({
+            where: {
+                id: worker_id,
+            },
+            data: {
+                amount: { increment: amount },
             },
         });
         return res.status(200).json({ response });

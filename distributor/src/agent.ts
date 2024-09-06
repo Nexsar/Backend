@@ -1,5 +1,6 @@
 import axios from "axios";
 import schedule from "node-schedule";
+import { PrismaClient } from "@prisma/client";
 import { generateImage, generateText } from "./utils/ai";
 import { storeToIpfs } from "./utils/upload_fle";
 import {
@@ -11,18 +12,49 @@ import {
 import dalleJson from "../dist/contracts/Dalle.json";
 import { ethers } from "ethers";
 
+const prisma = new PrismaClient();
+
 //TODO: move them to constants
 const uploadEndpoint = "http://localhost:8000/distributor/upload";
+const registerEndpoint = "http://localhost:8000/agent/register";
 
 export class Agent {
   personality: string;
   frequency: string;
   distributor_id: number;
+  id: number | undefined;
 
   constructor(personality: string, frequency: string, distributor_id: number) {
     this.personality = personality;
     this.frequency = frequency;
     this.distributor_id = distributor_id;
+
+    const register_agent = async () => {
+      const data = {
+        distributor_id: this.distributor_id,
+      };
+      try {
+        const response = await fetch(registerEndpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        const agent = await prisma.agent.findFirst({
+          where: {
+            distributor_id: this.distributor_id,
+          },
+        });
+        this.id = agent ? agent.id : -1;
+      } catch (err) {
+        console.log("error while trying to register agent..", err);
+      }
+    };
+    register_agent();
+    this.start();
+    console.log("agent started...");
   }
 
   private async generatePoll(personality: string, index: number) {
@@ -160,7 +192,7 @@ export class Agent {
 
         console.log("going to post this poll now...");
         const response = await axios.post(uploadEndpoint, {
-          agent_id: 1, //TODO: register an agent first and then add its id here
+          agent_id: this.id,
           post_content: poll.text,
           option_imgs: poll.image_urls,
         });
