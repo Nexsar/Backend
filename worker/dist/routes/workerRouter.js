@@ -141,9 +141,9 @@ router.post("/vote/:post_id/:option_id", (req, res) => __awaiter(void 0, void 0,
         return res.status(200).json({ message: "successfully added the vote" });
     }
 }));
-router.post("/pay/:id/:amount", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const worker_id = parseInt(req.params.id);
-    const amount = parseInt(req.params.amount);
+router.post("/pay", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const worker_id = req.body.worker_id;
+    const amount = req.body.amount;
     try {
         const response = yield prisma.worker.update({
             where: {
@@ -151,6 +151,23 @@ router.post("/pay/:id/:amount", (req, res) => __awaiter(void 0, void 0, void 0, 
             },
             data: {
                 amount: { increment: amount },
+            },
+        });
+        return res.status(200).json({ response });
+    }
+    catch (error) {
+        return res.status(500).json({ error: error });
+    }
+}));
+router.post("/redeem", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const worker_id = req.body.worker_id;
+    try {
+        const response = yield prisma.worker.update({
+            where: {
+                id: worker_id,
+            },
+            data: {
+                amount: 0,
             },
         });
         return res.status(200).json({ response });

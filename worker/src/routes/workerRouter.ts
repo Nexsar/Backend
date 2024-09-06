@@ -141,9 +141,9 @@ router.post("/vote/:post_id/:option_id", async (req, res) => {
   }
 });
 
-router.post("/pay/:id/:amount", async (req, res) => {
-  const worker_id = parseInt(req.params.id);
-  const amount = parseInt(req.params.amount);
+router.post("/pay", async (req, res) => {
+  const worker_id = req.body.worker_id;
+  const amount = req.body.amount;
 
   try {
     const response = await prisma.worker.update({
@@ -152,6 +152,25 @@ router.post("/pay/:id/:amount", async (req, res) => {
       },
       data: {
         amount: { increment: amount },
+      },
+    });
+
+    return res.status(200).json({ response });
+  } catch (error: any) {
+    return res.status(500).json({ error: error });
+  }
+});
+
+router.post("/redeem", async (req, res) => {
+  const worker_id = req.body.worker_id;
+
+  try {
+    const response = await prisma.worker.update({
+      where: {
+        id: worker_id,
+      },
+      data: {
+        amount: 0,
       },
     });
 

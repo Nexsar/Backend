@@ -41,8 +41,6 @@ router.post("/register", (req, res) => __awaiter(void 0, void 0, void 0, functio
         console.log("distributor created..", distributor);
         const agent = new agent_1.Agent(description, `*/${frequency} * * * * *`, distributor.id);
         console.log("created agent");
-        agent.start();
-        console.log("agent started...");
         return res.status(200).json({
             distributor,
         });
@@ -52,6 +50,38 @@ router.post("/register", (req, res) => __awaiter(void 0, void 0, void 0, functio
         return res.status(500).json({
             err: err,
         });
+    }
+}));
+//Note: I am assuming that signer will be passed from frontend and below api is
+//what will be called
+router.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { address, description, budget, name, frequency, signer } = req.body.data;
+    try {
+        const distributor = yield prisma.distributor.create({
+            data: {
+                address: address,
+                budget: budget,
+                name: name,
+                description: description,
+                frequency: frequency,
+                posts: {
+                    create: [],
+                },
+            },
+        });
+        console.log("distributor created..", distributor);
+        const agent = new agent_1.Agent(description, `*/${frequency} * * * * *`, distributor.id);
+        console.log("created agent");
+        agent.start(signer);
+        console.log("agent started...");
+        return res.status(200).json({
+            distributor,
+        });
+    }
+    catch (err) {
+        return res
+            .status(500)
+            .json({ err: `could not create distributor due to error: ${err}` });
     }
 }));
 router.post("/upload", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -80,7 +110,7 @@ router.post("/upload", (req, res) => __awaiter(void 0, void 0, void 0, function*
                 const post = yield tx.post.create({
                     data: {
                         distributor_id: distributor_id,
-                        content: post_content,
+                        content: post_content !== null && post_content !== void 0 ? post_content : "select best pic",
                         done: false,
                     },
                 });
@@ -112,23 +142,74 @@ router.post("/upload", (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 }));
 router.patch("/post_done/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    //TODO: CHECK if the distributor is finishing his OWN posts only
     const { id } = req.params;
     try {
         const postId = parseInt(id, 10);
         if (isNaN(postId)) {
             return res.status(400).json({ error: "Invalid post ID" });
         }
-        const post = yield prisma.post.update({
+        const post = yield prisma.post.findFirst({
             where: { id: postId },
-            data: { done: true },
+            include: {
+                options: true,
+            },
         });
-        return res.json(post);
+        console.log({ post });
+        const pay_worker_endpoint = "http://localhost:7000/worker/pay";
+        let max_votes = -1;
+        let winning_option_index = -1;
+        if (!post)
+            return;
+        //we shoud mark the post done
+        const post_done = yield prisma.post.update({
+            where: {
+                id: postId,
+            },
+            data: {
+                done: true,
+            },
+        });
+        console.log({ post_done });
+        //@ts-ignore
+        for (let i = 0; i < post.options.length; i++) {
+            //@ts-ignore
+            let option = post.options[i];
+            if (option.votes > max_votes) {
+                max_votes = option.votes;
+                winning_option_index = i;
+            }
+        }
+        console.log(post.options[winning_option_index]);
+        console.log(post.options[winning_option_index].voters);
+        //@ts-ignore
+        for (let i = 0; i < post.options[winning_option_index].voters.length; i++) {
+            //TODO: remove 100 as hard-coded
+            //@ts-ignore
+            let worker_id = post.options[winning_option_index].voters[i];
+            console.log({ worker_id });
+            let data = {
+                worker_id: worker_id,
+                //@ts-ignore
+                amount: 100 / post.options[winning_option_index].voters.length,
+            };
+            console.log({ data });
+            const response = yield fetch(pay_worker_endpoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+            console.log({ response });
+        }
+        return res.status(200).json({ message: "sent money to all" });
     }
     catch (error) {
         console.error(error);
         return res
             .status(500)
-            .json({ error: "An error occurred while updating the post" });
+            .json({ error: "An error occurred while updating the post" + error });
     }
 }));
 exports.default = router;
