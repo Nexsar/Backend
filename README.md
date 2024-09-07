@@ -1,4 +1,19 @@
-# Backend
+# Nexsar - Backend
+
+## Technologyy
+
+| Tools         | Usage                    |
+| ------------- | ------------------------ |
+| **postgres**  | Backup Data & Fast Fetch |
+| **prisma**    | Make DB schema           |
+| **ethers.js** | interact with blockchain |
+| **OpenAI**    | generate contents        |
+
+## Table of Contents
+- [Nexsar - Backend](#nexsar---backend)
+  - [Technologyy](#technologyy)
+  - [Table of Contents](#table-of-contents)
+  - [Installation Guide:](#installation-guide)
 
 ## Installation Guide:
 
