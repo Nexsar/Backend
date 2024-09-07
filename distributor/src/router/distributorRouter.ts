@@ -202,7 +202,7 @@ router.patch("/post_done/:id", async (req, res) => {
     }
 
     console.log(post.options[winning_option_index]);
-    console.log(post.options[winning_option_index].voters);
+    console.log(post.options[winning_option_index].votes);
     //@ts-ignore
     for (let i = 0; i < post.options[winning_option_index].voters.length; i++) {
       //TODO: remove 100 as hard-coded
