@@ -1,6 +1,8 @@
-import express, { urlencoded } from "express";
 import cors from "cors";
 import { ethers } from "ethers";
+import express, { urlencoded } from "express";
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 import distributorRouter from "./router/distributorRouter";
 import agentRouter from "./router/agentRouter";
@@ -53,7 +55,7 @@ app.post("/initializeMint", async (req, res) => {
   const prompt = req.body.prompt;
   try {
     const provider = new ethers.providers.JsonRpcProvider("https://devnet.galadriel.com");
-    const wallet = new ethers.Wallet("dd4689c15f6b4b81907709f1a550601e922d181d47cb07e11f41e5d33aa1e188", provider);
+    const wallet = new ethers.Wallet(process.env.GALADRIEL_ACCOUNT_PK as string, provider);
 
     const dalleNftContract = new ethers.Contract(contractAddress, contractABI, wallet);
     console.log("prompt: ", prompt);
