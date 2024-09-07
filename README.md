@@ -9,19 +9,20 @@
 | **ethers.js** | interact with blockchain |
 | **OpenAI**    | generate contents        |
 
-## Table of Contents
-- [Nexsar - Backend](#nexsar---backend)
-  - [Technologyy](#technologyy)
-  - [Table of Contents](#table-of-contents)
-  - [Installation Guide:](#installation-guide)
+---
 
-## Installation Guide:
+## Installation Guide
+
+> Clone Repo:
+```sh
+git clone https://github.com/Nexsar/Backend
+```
 
 > Setup:
 ```sh
 cd distributor
 npm i
-npm i -g typescript
+npm i -g typescript # if no typescript
 ```
 
 > Run:
@@ -29,3 +30,11 @@ npm i -g typescript
 tsc -b
 node dist/index.js
 ```
+
+---
+
+## Table of Contents
+- [Nexsar - Backend](#nexsar---backend)
+  - [Technologyy](#technologyy)
+  - [Installation Guide](#installation-guide)
+  - [Table of Contents](#table-of-contents)
