@@ -115,7 +115,7 @@ router.post("/upload", async (req, res) => {
       // 1) create a post 2) create the options 3) add the options to the post
       // all this should happen atomically, hence we should do a database transaction
 
-      const post_with_options = await prisma.$transaction(async (tx) => {
+      const post_with_options = await prisma.$transaction(async (tx:any) => {
         const post = await tx.post.create({
           data: {
             distributor_id: distributor_id,
@@ -156,6 +156,7 @@ router.post("/upload", async (req, res) => {
 router.patch("/post_done/:id", async (req, res) => {
   //TODO: CHECK if the distributor is finishing his OWN posts only
   const { id } = req.params;
+  const distributor_id = req.body.distributor_id;
 
   try {
     const postId = parseInt(id, 10);
@@ -173,7 +174,13 @@ router.patch("/post_done/:id", async (req, res) => {
 
     console.log({ post });
 
-    const pay_worker_endpoint = "http://localhost:7000/worker/pay";
+    //check only own posts are closed by a distributor
+
+    if(post.distributor_id!=distributor_id){
+      return res.status(400).json({"error": "you can only close your own posts"});
+    }
+
+    const pay_worker_endpoint = "http://localhost:8000/worker/pay";
     let max_votes = -1;
     let winning_option_index = -1;
     if (!post) return;
@@ -203,6 +210,20 @@ router.patch("/post_done/:id", async (req, res) => {
 
     console.log(post.options[winning_option_index]);
     console.log(post.options[winning_option_index].votes);
+
+    const get_money_endpoint = "http://localhost:8000/distributor/extract";
+    const data = {
+      distributor_id: distributor_id
+    }
+
+    const removed_money_response = await fetch(get_money_endpoint,{
+      method:"PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
     //@ts-ignore
     for (let i = 0; i < post.options[winning_option_index].voters.length; i++) {
       //TODO: remove 100 as hard-coded
@@ -234,5 +255,25 @@ router.patch("/post_done/:id", async (req, res) => {
       .json({ error: "An error occurred while updating the post" + error });
   }
 });
+
+router.patch("/extract", async (req,res)=>{
+
+  const distributor_id = req.body.distributor_id;
+  const amount = 100;
+  try {
+    const response = await prisma.distributor.update({
+      where: {
+        id: distributor_id,
+      },
+      data: {
+        budget: { increment: -amount },
+      },
+    });
+
+    return res.status(200).json({ response });
+  } catch (error: any) {
+    return res.status(500).json({ error: error });
+  }
+})
 
 export default router;

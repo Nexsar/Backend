@@ -52,3 +52,10 @@ model Agent {
   id             Int @id @default(autoincrement())
   distributor_id Int
 }
+
+model Votes {
+  id             Int    @id @default(autoincrement())
+  worker_address String
+  post_id        Int
+  option_id      Int
+}

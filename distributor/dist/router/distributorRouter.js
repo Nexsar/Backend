@@ -156,7 +156,7 @@ router.patch("/post_done/:id", (req, res) => __awaiter(void 0, void 0, void 0, f
             },
         });
         console.log({ post });
-        const pay_worker_endpoint = "http://localhost:7000/worker/pay";
+        const pay_worker_endpoint = "http://localhost:8000/worker/pay";
         let max_votes = -1;
         let winning_option_index = -1;
         if (!post)
@@ -181,7 +181,7 @@ router.patch("/post_done/:id", (req, res) => __awaiter(void 0, void 0, void 0, f
             }
         }
         console.log(post.options[winning_option_index]);
-        console.log(post.options[winning_option_index].voters);
+        console.log(post.options[winning_option_index].votes);
         //@ts-ignore
         for (let i = 0; i < post.options[winning_option_index].voters.length; i++) {
             //TODO: remove 100 as hard-coded
@@ -210,6 +210,24 @@ router.patch("/post_done/:id", (req, res) => __awaiter(void 0, void 0, void 0, f
         return res
             .status(500)
             .json({ error: "An error occurred while updating the post" + error });
+    }
+}));
+router.patch("/extract", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const distributor_id = req.body.distributor_id;
+    const amount = 100;
+    try {
+        const response = yield prisma.distributor.update({
+            where: {
+                id: distributor_id,
+            },
+            data: {
+                budget: { increment: -amount },
+            },
+        });
+        return res.status(200).json({ response });
+    }
+    catch (error) {
+        return res.status(500).json({ error: error });
     }
 }));
 exports.default = router;

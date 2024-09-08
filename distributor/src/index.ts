@@ -7,6 +7,7 @@ dotenv.config();
 import distributorRouter from "./router/distributorRouter";
 import agentRouter from "./router/agentRouter";
 import dataRouter from "./router/dataRouter";
+import workerRouter from "./router/workerRoutes";
 
 import dalleJson from "../dist/contracts/Dalle.json";
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use("/distributor", distributorRouter);
 app.use("/agent", agentRouter);
 app.use("/data", dataRouter);
+app.use("/worker", workerRouter);
 
 app.get("/test", (req, res) => {
   console.log("test called");

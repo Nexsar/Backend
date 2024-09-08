@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -12,12 +35,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const ethers_1 = require("ethers");
+const express_1 = __importDefault(require("express"));
+const dotenv = __importStar(require("dotenv"));
+dotenv.config();
 const distributorRouter_1 = __importDefault(require("./router/distributorRouter"));
 const agentRouter_1 = __importDefault(require("./router/agentRouter"));
 const dataRouter_1 = __importDefault(require("./router/dataRouter"));
+const workerRoutes_1 = __importDefault(require("./router/workerRoutes"));
 const Dalle_json_1 = __importDefault(require("../dist/contracts/Dalle.json"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
@@ -25,6 +51,7 @@ app.use(express_1.default.json());
 app.use("/distributor", distributorRouter_1.default);
 app.use("/agent", agentRouter_1.default);
 app.use("/data", dataRouter_1.default);
+app.use("/worker", workerRoutes_1.default);
 app.get("/test", (req, res) => {
     console.log("test called");
     res.send({ "message": "ok" });
@@ -56,7 +83,7 @@ app.post("/initializeMint", (req, res) => __awaiter(void 0, void 0, void 0, func
     const prompt = req.body.prompt;
     try {
         const provider = new ethers_1.ethers.providers.JsonRpcProvider("https://devnet.galadriel.com");
-        const wallet = new ethers_1.ethers.Wallet("dd4689c15f6b4b81907709f1a550601e922d181d47cb07e11f41e5d33aa1e188", provider);
+        const wallet = new ethers_1.ethers.Wallet(process.env.GALADRIEL_ACCOUNT_PK, provider);
         const dalleNftContract = new ethers_1.ethers.Contract(contractAddress, contractABI, wallet);
         console.log("prompt: ", prompt);
         const tx = yield dalleNftContract.initializeMint(prompt);

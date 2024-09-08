@@ -71,4 +71,13 @@ router.get("/posts/distributor/:id", (req, res) => __awaiter(void 0, void 0, voi
         return res.status(500).json({ error: error });
     }
 }));
+router.get("/votes", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield prisma.votes.findMany({});
+        return res.status(200).json({ response });
+    }
+    catch (err) {
+        return res.status(500).json({ error: err });
+    }
+}));
 exports.default = router;

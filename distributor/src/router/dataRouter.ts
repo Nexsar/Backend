@@ -63,4 +63,14 @@ router.get("/posts/distributor/:id", async (req, res) => {
     return res.status(500).json({ error: error });
   }
 });
+
+
+router.get("/votes", async (req, res) => {
+  try {
+    const response = await prisma.votes.findMany({});
+    return res.status(200).json({ response });
+  } catch (err: any) {
+    return res.status(500).json({ error: err });
+  }
+});
 export default router;
